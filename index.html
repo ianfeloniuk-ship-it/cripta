@@ -453,14 +453,18 @@ function vLanc(){
       return `<tr><td>${esc(r.c)}</td><td>${num(r.now,1)}%</td><td>${num(r.t,1)}%</td><td class="${r.a>0.005?'gold':'mut'}"><b>${brl(r.a)}</b></td><td class="hide-sm note">${cand&&r.a>0.005?`${cand.p.ticker}${cand.m?.mgG!=null?' ('+pct(cand.m.mgG,0)+' até Graham)':' (menor peso)'}`:''}</td></tr>`}).join('')}</tbody></table></div>`;
   };
 }
-const MODELOS={renda:{nome:'Reserva & Renda (nov/2026)',
+const MODELOS={renda:{nome:'Fase 1 · Erguer a muralha (Reserva & Renda, nov/2026)',
   desc:'85% na reserva (CDB de liquidez diária + Tesouro Selic), 6% em FIIs que pagam todo mês, 4% em ações privadas com DY ≥ 4%, 2% em ações de crescimento e 3% em cripto. Registre a reserva como o ativo RESERVA (quantidade = valor em reais, preço 1).',
   targets:{'Renda fixa':85,'FIIs':6,'Ações':5.6,'BDRs':0.4,'Cripto':3},
   meta:{RESERVA:{cls:'Renda fixa',name:'Reserva: CDB liquidez diária + Tesouro Selic'},BITH11:{cls:'Cripto'},ETHE11:{cls:'Cripto'}},
   watch:[['KNCR11','renda · papel CDI'],['KNIP11','renda · papel IPCA'],['BTLG11','renda · logística'],['XPML11','renda · shoppings'],['HGRU11','renda · varejo'],
     ['ITUB3','renda · mensal'],['ALOS3','renda · mensal'],['VIVT3','renda'],['PSSA3','renda · trimestral'],['VBBR3','renda · trimestral'],
     ['EMBJ3','crescimento'],['PRIO3','crescimento'],['CURY3','crescimento + renda'],['WEGE3','crescimento'],['TSMC34','crescimento · BDR'],
-    ['BITH11','cripto · bitcoin'],['ETHE11','cripto · ethereum']]}};
+    ['BITH11','cripto · bitcoin'],['ETHE11','cripto · ethereum']]},
+  vigilia:{nome:'Fase 2 · Vigília (reserva completa, ainda sem emprego)',desc:'70% na reserva, 12% em FIIs, 12% em ações (dividendos e crescimento), 2% no exterior/BDRs e 4% em cripto. Use quando a reserva chegar à meta da planilha.',
+    targets:{'Renda fixa':70,'FIIs':12,'Ações':12,'BDRs':1,'Exterior':1,'Cripto':4},meta:{},watch:[]},
+  cacada:{nome:'Fase 3 · Caçada (com emprego e reserva completa)',desc:'Aproximação para uma carteira de R$ 18 mil com reserva de R$ 5,4 mil: 30% reserva, 21% FIIs, 31% ações, 11% exterior/BDRs, 7% cripto. A planilha calcula o valor exato para o seu caso (a reserva fica fixa na meta).',
+    targets:{'Renda fixa':30,'FIIs':21,'Ações':31,'BDRs':5,'Exterior':6,'Cripto':7},meta:{},watch:[]}};
 function aplicarModelo(k){const m=MODELOS[k];if(!confirm(`Aplicar o pacto "${m.nome}"? Suas metas por classe serão trocadas e ${m.watch.length} ativos entram na Vigília. Seus registros não mudam.`))return;
   S.targets={...m.targets};for(const [t,meta] of Object.entries(m.meta))S.meta[t]=Object.assign(S.meta[t]||{},meta);
   for(const [t,tag] of m.watch){S.meta[t]=Object.assign(S.meta[t]||{},{tag});if(!S.watch.includes(t))S.watch.push(t)}
@@ -690,6 +694,7 @@ function vAjustes(){
   <p class="note">Uma linha por operação: <code>data;ativo;tipo;quantidade;preço;taxas</code>. Tipo = C (compra) ou V (venda). Exemplo: <code>15/03/2024;ITSA4;C;100;9,85;0</code></p>
   <textarea id="csvIn" rows="5" style="width:100%;font:14px monospace"></textarea>
   <div class="row" style="margin-top:8px"><button class="b" id="csvGo">Transcrever</button></div></div>
+  <div class="card"><h2>Livro-caixa <small>planilha de gastos e plano</small></h2><p class="note">Planilha para anotar gastos e entradas, controlar o orçamento por categoria e calcular a meta da reserva, a fase atual e onde colocar cada aporte. Abre no Excel, no Google Planilhas e no celular.</p><a class="b" style="display:inline-block;text-decoration:none" href="planilha/Cripta-gastos-e-plano.xlsx" download>Baixar a planilha</a></div>
   <div class="card"><h2>Profanar a cripta <small>apagar tudo</small></h2><button class="b red" id="wipe">Apagar todos os registros</button></div>
   <p class="lore">Cotações da brapi.dev, podem ter atraso. Nada aqui é recomendação de investimento.</p>`;
   $('#tf').onsubmit=e=>{e.preventDefault();S.token=e.target.t.value.trim();save();toast('Selo de sangue aceito')};
