@@ -171,7 +171,7 @@ for c,v in zip('BCD',['Guarde quase tudo na reserva até completar a meta. Risco
     fx(p[f'{c}25'],v);p[f'{c}25'].alignment=Alignment(wrap_text=True,vertical='top')
 p.row_dimensions[25].height=62
 PCTS=[(0.85,0.70,0),(0.06,0.12,0.30),(0.04,0.08,0.25),(0.02,0.04,0.20),(0.00,0.02,0.15),(0.03,0.04,0.10)]
-EX=['CDB 100% CDI liquidez diária, Tesouro Selic','KNCR11, KNIP11, BTLG11, XPML11, HGRU11','PINE3, ALOS3, VIVT3, PSSA3, VBBR3','BPAC11, EMBJ3, PRIO3, CURY3, WEGE3','TSMC34, IVVB11, ações dos EUA','BITH11 / ETHE11 ou BTC e ETH']
+EX=['CDB 100% CDI liquidez diária, Tesouro Selic','KNCR11, KNIP11, BTLG11, XPML11, HGRU11','PINE3, ALOS3, FIQE3, PSSA3, VBBR3','BPAC11, EMBJ3, PRIO3, CURY3, WEGE3','TSMC34, IVVB11, ações dos EUA','BITH11 / ETHE11 ou BTC e ETH']
 for i,(cl,pc,ex) in enumerate(zip(CL,PCTS,EX)):
     r=26+i;p[f'A{r}']=cl;p[f'A{r}'].font=BASE;p[f'A{r}'].border=BOX
     for c,v in zip('BCD',pc):inp(p[f'{c}{r}'],v,'0%')
